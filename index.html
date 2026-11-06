@@ -15,10 +15,10 @@ body {
   margin: 0;
   padding: 20px;
   font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #081b33, #123d5a);
   color: white;
-  text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg,#081b33,#123d5a);
+  text-align: center;
 }
 
 .container {
@@ -27,107 +27,121 @@ body {
 }
 
 h1 {
-  color: #ffd54a;
+  color: #ffd700;
   font-size: 32px;
+  margin-bottom: 5px;
 }
 
 .subtitle {
-  color: #d8e8f5;
-  line-height: 1.5;
+  color: #d5e6f5;
+  margin-bottom: 20px;
 }
 
-.pontos {
+.stats {
   display: flex;
   justify-content: space-around;
-  gap: 10px;
+  gap: 8px;
   margin: 20px 0;
 }
 
-.pontos div {
-  background: #ffffff18;
-  padding: 15px;
+.stat {
+  background: #16476b;
+  padding: 12px 8px;
   border-radius: 12px;
   flex: 1;
 }
 
-.pontos strong {
+.stat strong {
   display: block;
-  font-size: 25px;
-  color: #ffd54a;
+  color: #ffd700;
+  font-size: 23px;
   margin-top: 5px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-  margin: 25px 0;
-}
-
-.carta {
-  aspect-ratio: 1;
-  border: 2px solid #4b9ac6;
-  border-radius: 15px;
-  background: linear-gradient(145deg,#17618d,#103a60);
-  color: white;
-  font-size: 35px;
-  cursor: pointer;
-  box-shadow: 0 5px 12px #0005;
-  transition: transform .2s, background .2s;
-}
-
-.carta:active {
-  transform: scale(.94);
-}
-
-.carta.acerto {
-  background: #176b45;
-  border-color: #50e49a;
-}
-
-.carta.erro {
-  background: #813c42;
-  border-color: #ff8585;
-}
-
-.carta:disabled {
-  cursor: default;
-  opacity: 1;
-}
-
-button.principal {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  background: #ffd54a;
-  color: #152d42;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button.principal:active {
-  transform: scale(.98);
-}
-
-#mensagem {
-  min-height: 55px;
-  font-size: 18px;
+#message {
+  min-height: 48px;
+  font-size: 17px;
   font-weight: bold;
   margin: 15px 0;
-  color: #ffd54a;
 }
 
-.regras {
-  margin-top: 25px;
-  padding: 15px;
-  background: #ffffff12;
+.game {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.card {
+  aspect-ratio: 1;
+  background: linear-gradient(145deg, #2476a5, #104064);
+  border: 2px solid #55b9ed;
   border-radius: 12px;
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px #0005;
+  user-select: none;
+  transition: 0.2s;
 }
 
+.card.hidden {
+  color: white;
+}
+
+.card.hidden::after {
+  content: "?";
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.card.revealed {
+  background: white;
+  border-color: #ffd700;
+}
+
+.card.correct {
+  background: #198754;
+  border-color: #62ff9c;
+}
+
+.card:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+button.main-button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 22px;
+  border: none;
+  border-radius: 12px;
+  background: #ffd700;
+  color: #102b42;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.main-button:active {
+  transform: scale(0.98);
+}
+
+.instructions {
+  background: #16476b;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer {
+  margin-top: 20px;
+  color: #a9c8dc;
+  font-size: 12px;
+}
 </style>
 </head>
 
@@ -135,198 +149,210 @@ button.principal:active {
 
 <div class="container">
 
-<h1>💰 RENDA FÁCIL</h1>
+  <h1>💰 Renda Fácil</h1>
+  <p class="subtitle">Encontre as três imagens iguais!</p>
 
-<p class="subtitle">
-Encontre as 3 imagens premiadas!
-<br>
-Toque nas cartas para descobrir.
-</p>
+  <div class="stats">
+    <div class="stat">
+      Pontuação
+      <strong id="score">0</strong>
+    </div>
 
-<div class="pontos">
-  <div>
-    Pontuação
-    <strong id="pontos">0</strong>
+    <div class="stat">
+      Tentativas
+      <strong id="attempts">5</strong>
+    </div>
+
+    <div class="stat">
+      Recorde
+      <strong id="record">0</strong>
+    </div>
   </div>
 
-  <div>
-    Recorde
-    <strong id="recorde">0</strong>
+  <div id="message">
+    Clique em jogar para começar!
   </div>
-</div>
 
-<h3 id="progresso">Encontre 3 imagens escondidas</h3>
+  <div class="game" id="game"></div>
 
-<div class="grid" id="tabuleiro"></div>
+  <button class="main-button" id="startButton" onclick="startGame()">
+    🎮 JOGAR
+  </button>
 
-<div id="mensagem">
-Boa sorte! 🍀
-</div>
+  <div class="instructions">
+    <strong>📌 Como jogar:</strong><br>
+    1. Clique nas cartas para revelar as imagens.<br>
+    2. Encontre três imagens iguais.<br>
+    3. Você tem somente 5 tentativas.<br>
+    4. Acertou? Ganha 10 pontos!<br>
+    5. Errou? Perde 2 pontos.
+  </div>
 
-<button class="principal" id="jogar" onclick="novaRodada()">
-🎮 COMEÇAR JOGO
-</button>
-
-<div class="regras">
-<strong>📋 COMO JOGAR</strong>
-<br>
-1. Existem 9 cartas escondidas.
-<br>
-2. Encontre as 3 imagens premiadas.
-<br>
-3. Cada acerto vale 10 pontos.
-<br>
-4. Cada erro desconta 2 pontos.
-<br>
-5. Encontre as três para vencer!
-</div>
+  <div class="footer">
+    Renda Fácil © 2026
+  </div>
 
 </div>
 
 <script>
+let score = Number(localStorage.getItem("rf_score")) || 0;
+let record = Number(localStorage.getItem("rf_record")) || 0;
 
-let pontos = 0;
-let recorde = Number(localStorage.getItem("recordeRF")) || 0;
-let encontrados = 0;
-let tentativas = 0;
-let jogoAtivo = false;
-let cartas = [];
+let attempts = 5;
+let selected = [];
+let cards = [];
+let playing = false;
+let checking = false;
 
-const imagens = [
-  "🎁", "💎", "⭐",
-  "🍀", "🏆", "💰",
-  "🎯", "❤️", "🔥"
-];
+const images = ["🐶", "🐱", "🦁", "🐼"];
 
-document.getElementById("recorde").innerText = recorde;
+const game = document.getElementById("game");
+const message = document.getElementById("message");
+const startButton = document.getElementById("startButton");
 
-function atualizarPontuacao() {
-  document.getElementById("pontos").innerText = pontos;
-  document.getElementById("recorde").innerText = recorde;
+function updateStats() {
+  document.getElementById("score").textContent = score;
+  document.getElementById("attempts").textContent = attempts;
+  document.getElementById("record").textContent = record;
+
+  localStorage.setItem("rf_score", score);
+  localStorage.setItem("rf_record", record);
 }
 
-function embaralhar(lista) {
-  return lista.sort(() => Math.random() - 0.5);
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
-function novaRodada() {
+function startGame() {
+  attempts = 5;
+  selected = [];
+  cards = [];
+  playing = true;
+  checking = false;
 
-  encontrados = 0;
-  tentativas = 0;
-  jogoAtivo = true;
+  game.innerHTML = "";
 
-  document.getElementById("mensagem").innerText =
-    "Escolha uma carta! 🍀";
+  // 4 imagens diferentes, com 4 cópias de cada.
+  let deck = [];
 
-  document.getElementById("progresso").innerText =
-    "Encontradas: 0 de 3";
-
-  document.getElementById("jogar").innerText =
-    "🔄 NOVA RODADA";
-
-  const premiadas = embaralhar([...imagens]).slice(0,3);
-
-  cartas = embaralhar(imagens.map((imagem) => ({
-    imagem: imagem,
-    premiada: premiadas.includes(imagem),
-    revelada: false
-  })));
-
-  const tabuleiro = document.getElementById("tabuleiro");
-  tabuleiro.innerHTML = "";
-
-  cartas.forEach((carta, indice) => {
-
-    const botao = document.createElement("button");
-
-    botao.className = "carta";
-    botao.innerHTML = "❓";
-    botao.setAttribute("aria-label", "Carta escondida");
-
-    botao.onclick = () => revelarCarta(indice, botao);
-
-    tabuleiro.appendChild(botao);
-
+  images.forEach(image => {
+    for (let i = 0; i < 4; i++) {
+      deck.push(image);
+    }
   });
 
+  shuffle(deck);
+
+  deck.forEach((image, index) => {
+    const card = document.createElement("button");
+
+    card.type = "button";
+    card.className = "card hidden";
+    card.textContent = "";
+    card.dataset.image = image;
+    card.setAttribute("aria-label", "Carta escondida");
+
+    card.onclick = () => revealCard(card);
+
+    game.appendChild(card);
+    cards.push(card);
+  });
+
+  message.textContent = "Encontre três imagens iguais!";
+  startButton.textContent = "🔄 RECOMEÇAR";
+
+  updateStats();
 }
 
-function revelarCarta(indice, botao) {
+function revealCard(card) {
+  if (!playing || checking) return;
+  if (!card.classList.contains("hidden")) return;
 
-  if (!jogoAtivo || cartas[indice].revelada) {
-    return;
+  card.classList.remove("hidden");
+  card.classList.add("revealed");
+  card.textContent = card.dataset.image;
+  card.setAttribute("aria-label", "Imagem revelada");
+
+  selected.push(card);
+
+  if (selected.length === 3) {
+    checking = true;
+    checkCards();
   }
+}
 
-  const carta = cartas[indice];
+function checkCards() {
+  const first = selected[0].dataset.image;
 
-  carta.revelada = true;
-  tentativas++;
+  const isCorrect = selected.every(
+    card => card.dataset.image === first
+  );
 
-  botao.innerText = carta.imagem;
-  botao.disabled = true;
+  if (isCorrect) {
+    score += 10;
 
-  if (carta.premiada) {
+    selected.forEach(card => {
+      card.classList.remove("revealed");
+      card.classList.add("correct");
+      card.disabled = true;
+    });
 
-    encontrados++;
-    pontos += 10;
+    message.textContent = "🎉 PARABÉNS! Você encontrou as três iguais!";
 
-    botao.classList.add("acerto");
+    if (score > record) {
+      record = score;
+    }
 
-    document.getElementById("mensagem").innerText =
-      "🎉 PARABÉNS! Você encontrou uma imagem premiada!";
+    playing = false;
+    checking = false;
+
+    updateStats();
+    startButton.textContent = "🎮 JOGAR NOVAMENTE";
 
   } else {
+    attempts--;
+    score = Math.max(0, score - 2);
 
-    pontos = Math.max(0, pontos - 2);
+    message.textContent = "❌ Não são iguais! Tente novamente.";
 
-    botao.classList.add("erro");
+    updateStats();
 
-    document.getElementById("mensagem").innerText =
-      "❌ Não foi dessa vez! Tente outra carta.";
+    setTimeout(() => {
+      selected.forEach(card => {
+        card.classList.remove("revealed");
+        card.classList.add("hidden");
+        card.textContent = "";
+        card.setAttribute("aria-label", "Carta escondida");
+      });
 
+      selected = [];
+      checking = false;
+
+      if (attempts <= 0) {
+        playing = false;
+        message.textContent =
+          "😢 Suas tentativas acabaram! Tente novamente.";
+
+        startButton.textContent = "🔄 JOGAR NOVAMENTE";
+      } else {
+        message.textContent =
+          "Você ainda tem " + attempts + " tentativa(s)!";
+      }
+
+    }, 1000);
   }
-
-  if (pontos > recorde) {
-    recorde = pontos;
-    localStorage.setItem("recordeRF", recorde);
-  }
-
-  atualizarPontuacao();
-
-  document.getElementById("progresso").innerText =
-    "Encontradas: " + encontrados + " de 3";
-
-  if (encontrados === 3) {
-
-    jogoAtivo = false;
-
-    document.getElementById("mensagem").innerText =
-      "🏆 VOCÊ VENCEU! Encontrou as 3 imagens!";
-
-    document.getElementById("jogar").innerText =
-      "🎮 JOGAR NOVAMENTE";
-
-  }
-
-  if (tentativas === 9 && encontrados < 3) {
-
-    jogoAtivo = false;
-
-    document.getElementById("mensagem").innerText =
-      "Fim da rodada! Tente novamente.";
-
-    document.getElementById("jogar").innerText =
-      "🔄 TENTAR NOVAMENTE";
-
-  }
-
 }
 
-novaRodada();
-
+updateStats();
 </script>
 
 </body>
 </html>
+
+
 
 
