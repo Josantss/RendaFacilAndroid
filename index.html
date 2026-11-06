@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renda Fácil</title>
+<style>
+body {
+  margin: 0;
+  background: #101827;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+header {
+  background: #00b879;
+  padding: 25px;
+}
+h1 { margin: 0; }
+.container { padding: 20px; }
+.card {
+  background: #1e293b;
+  padding: 25px;
+  margin: 15px 0;
+  border-radius: 15px;
+}
+button {
+  background: #00c781;
+  color: white;
+  border: 0;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>💰 Renda Fácil</h1>
+<p>Divirta-se e conquiste recompensas!</p>
+</header>
+<div class="container">
+<div class="card">
+<h2>🎮 Jogo da Sorte</h2>
+<p>Toque no botão para jogar!</p>
+<button onclick="jogar()">JOGAR</button>
+<h3 id="resultado"></h3>
+</div>
+<div class="card">
+<h2>🏆 Sua pontuação</h2>
+<h1 id="pontos">0</h1>
+</div>
+</div>
+<script>
+let pontos = 0;
+function jogar() {
+  let premio = Math.floor(Math.random()*10)+1;
+  pontos += premio;
+  document.getElementById("pontos").innerText = pontos;
+  document.getElementById("resultado").innerText =
+  "Você ganhou " + premio + " pontos!";
+}
+</script>
+</body>
+</html>
