@@ -1,66 +1,215 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Renda Fácil</title>
+
 <style>
-body {
-  margin: 0;
-  background: #101827;
-  color: white;
-  font-family: Arial;
-  text-align: center;
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#081b33,#123d5a);
+color:white;
+min-height:100vh;
+display:flex;
+justify-content:center;
+padding:18px
 }
-header {
-  background: #00b879;
-  padding: 25px;
+.app{width:100%;max-width:440px;text-align:center}
+.logo{font-size:28px;font-weight:900;color:#65f5b5;margin:10px}
+.panel{
+background:#ffffff12;
+border:1px solid #ffffff25;
+border-radius:18px;
+padding:18px;
+margin:14px 0
 }
-h1 { margin: 0; }
-.container { padding: 20px; }
-.card {
-  background: #1e293b;
-  padding: 25px;
-  margin: 15px 0;
-  border-radius: 15px;
+.score{font-size:34px;font-weight:bold;color:#ffe66d}
+.muted{color:#c8d8e5;font-size:14px}
+.game{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:9px;
+margin:18px auto;
+max-width:300px
 }
-button {
-  background: #00c781;
-  color: white;
-  border: 0;
-  padding: 15px 25px;
-  border-radius: 10px;
-  font-size: 17px;
-  font-weight: bold;
+.cell{
+height:88px;
+border-radius:14px;
+background:#eaf4ff;
+color:#10253b;
+font-size:42px;
+display:flex;
+align-items:center;
+justify-content:center;
+border:3px solid transparent
 }
+.cell.win{border-color:#65f5b5}
+button{
+border:0;
+border-radius:13px;
+padding:15px;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+width:100%;
+margin:7px 0
+}
+.play{background:#65f5b5;color:#073323}
+.secondary{background:#284b67;color:white}
+.message{min-height:26px;font-weight:bold;margin:8px}
+.rules{font-size:13px;line-height:1.5;color:#d2e3ef}
 </style>
 </head>
+
 <body>
-<header>
-<h1>💰 Renda Fácil</h1>
-<p>Divirta-se e conquiste recompensas!</p>
-</header>
-<div class="container">
-<div class="card">
-<h2>🎮 Jogo da Sorte</h2>
-<p>Toque no botão para jogar!</p>
-<button onclick="jogar()">JOGAR</button>
-<h3 id="resultado"></h3>
+<div class="app">
+
+<div class="logo">💸 RENDA FÁCIL</div>
+<div class="muted">Jogue e combine símbolos!</div>
+
+<div class="panel">
+<div class="muted">PONTUAÇÃO</div>
+<div class="score" id="score">0</div>
+<div class="muted">Melhor pontuação: <b id="best">0</b></div>
 </div>
-<div class="card">
-<h2>🏆 Sua pontuação</h2>
-<h1 id="pontos">0</h1>
+
+<div class="panel">
+
+<div class="muted">Combine 3 símbolos iguais</div>
+
+<div class="game" id="board">
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
+<div class="cell">❔</div>
 </div>
+
+<div class="message" id="message">
+Toque em JOGAR para começar.
 </div>
+
+<button class="play" id="play">🎮 JOGAR</button>
+<button class="secondary" id="reset">↻ Zerar pontuação</button>
+
+</div>
+
+<div class="panel rules">
+<b>Como jogar:</b><br>
+Cada rodada revela 9 símbolos.<br>
+3 iguais = 10 pontos.<br>
+4 iguais = 20 pontos.<br>
+5 ou mais iguais = 30 pontos.
+<br><br>
+<b>Importante:</b> os pontos são apenas do jogo e não representam dinheiro real nem saque.
+</div>
+
+</div>
+
 <script>
-let pontos = 0;
-function jogar() {
-  let premio = Math.floor(Math.random()*10)+1;
-  pontos += premio;
-  document.getElementById("pontos").innerText = pontos;
-  document.getElementById("resultado").innerText =
-  "Você ganhou " + premio + " pontos!";
+const symbols=["🍀","💎","⭐","🪙","🎁","💰"];
+
+let score=0;
+let best=Number(localStorage.getItem("rf_best")||0);
+let busy=false;
+
+const scoreEl=document.getElementById("score");
+const bestEl=document.getElementById("best");
+const board=document.getElementById("board");
+const msg=document.getElementById("message");
+const play=document.getElementById("play");
+
+bestEl.textContent=best;
+
+function draw(arr,winning=[]){
+ board.innerHTML="";
+ arr.forEach((s,i)=>{
+  const d=document.createElement("div");
+  d.className="cell"+(winning.includes(i)?" win":"");
+  d.textContent=s;
+  board.appendChild(d);
+ });
 }
+
+function start(){
+ if(busy)return;
+
+ busy=true;
+ play.disabled=true;
+ msg.textContent="Girando os símbolos...";
+
+ let count=0;
+ let final=[];
+
+ const timer=setInterval(()=>{
+  final=Array.from({length:9},()=>{
+   return symbols[Math.floor(Math.random()*symbols.length)];
+  });
+
+  draw(final);
+  count++;
+
+  if(count>=12){
+   clearInterval(timer);
+   finish(final);
+  }
+ },100);
+}
+
+function finish(arr){
+ const counts={};
+
+ arr.forEach(s=>{
+  counts[s]=(counts[s]||0)+1;
+ });
+
+ const max=Math.max(...Object.values(counts));
+
+ let points=max>=5?30:max===4?20:max===3?10:0;
+
+ const winner=arr.map((s,i)=>{
+  return counts[s]===max&&max>=3?i:-1;
+ }).filter(i=>i>=0);
+
+ score+=points;
+ scoreEl.textContent=score;
+
+ if(score>best){
+  best=score;
+  localStorage.setItem("rf_best",best);
+  bestEl.textContent=best;
+ }
+
+ draw(arr,winner);
+
+ msg.textContent=points?
+ `🎉 ${max} iguais! Você ganhou ${points} pontos!`:
+ "Quase! Nenhum trio. Tente novamente!";
+
+ busy=false;
+ play.disabled=false;
+ play.textContent="🎮 JOGAR NOVAMENTE";
+}
+
+play.addEventListener("click",start);
+
+document.getElementById("reset").addEventListener("click",()=>{
+ if(busy)return;
+
+ score=0;
+ scoreEl.textContent=0;
+ msg.textContent="Pontuação zerada. Vamos jogar!";
+});
 </script>
+
 </body>
 </html>
