@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -9,60 +8,110 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#081b33,#123d5a);
-color:white;
-min-height:100vh;
-display:flex;
-justify-content:center;
-padding:18px
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#081b33,#123d5a);
+ color:white;
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ padding:15px;
 }
-.app{width:100%;max-width:440px;text-align:center}
-.logo{font-size:28px;font-weight:900;color:#65f5b5;margin:10px}
-.panel{
-background:#ffffff12;
-border:1px solid #ffffff25;
-border-radius:18px;
-padding:18px;
-margin:14px 0
+
+.app{
+ width:100%;
+ max-width:440px;
+ text-align:center;
 }
-.score{font-size:34px;font-weight:bold;color:#ffe66d}
+
+.logo{
+ font-size:29px;
+ font-weight:900;
+ color:#65f5b5;
+ margin:15px;
+}
+
 .muted{color:#c8d8e5;font-size:14px}
+
+.panel{
+ background:#ffffff12;
+ border:1px solid #ffffff25;
+ border-radius:18px;
+ padding:17px;
+ margin:14px 0;
+}
+
+.score{
+ font-size:36px;
+ font-weight:bold;
+ color:#ffe66d;
+}
+
 .game{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:9px;
-margin:18px auto;
-max-width:300px
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:9px;
+ margin:18px auto;
 }
+
 .cell{
-height:88px;
-border-radius:14px;
-background:#eaf4ff;
-color:#10253b;
-font-size:42px;
-display:flex;
-align-items:center;
-justify-content:center;
-border:3px solid transparent
+ aspect-ratio:1;
+ border-radius:14px;
+ background:#eaf4ff;
+ color:#10253b;
+ font-size:clamp(30px,9vw,43px);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border:3px solid transparent;
+ cursor:pointer;
+ user-select:none;
+ transition:transform .15s,border .15s;
 }
-.cell.win{border-color:#65f5b5}
+
+.cell.selected{
+ border-color:#ffe66d;
+ transform:scale(.94);
+ background:#fff5c9;
+}
+
+.cell.correct{
+ border-color:#65f5b5;
+ background:#caffdf;
+}
+
+.cell:disabled{
+ cursor:default;
+}
+
 button{
-border:0;
-border-radius:13px;
-padding:15px;
-font-size:17px;
-font-weight:bold;
-cursor:pointer;
-width:100%;
-margin:7px 0
+ border:0;
+ border-radius:13px;
+ padding:15px;
+ font-size:17px;
+ font-weight:bold;
+ cursor:pointer;
+ width:100%;
+ margin:7px 0;
 }
+
 .play{background:#65f5b5;color:#073323}
 .secondary{background:#284b67;color:white}
-.message{min-height:26px;font-weight:bold;margin:8px}
-.rules{font-size:13px;line-height:1.5;color:#d2e3ef}
+
+.message{
+ min-height:42px;
+ font-weight:bold;
+ margin:10px 0;
+ line-height:1.4;
+}
+
+.rules{
+ font-size:13px;
+ line-height:1.6;
+ color:#d2e3ef;
+}
 </style>
 </head>
 
@@ -70,146 +119,206 @@ margin:7px 0
 <div class="app">
 
 <div class="logo">💸 RENDA FÁCIL</div>
-<div class="muted">Jogue e combine símbolos!</div>
+<div class="muted">Combine imagens e conquiste pontos!</div>
 
 <div class="panel">
-<div class="muted">PONTUAÇÃO</div>
-<div class="score" id="score">0</div>
-<div class="muted">Melhor pontuação: <b id="best">0</b></div>
+ <div class="muted">PONTUAÇÃO</div>
+ <div class="score" id="score">0</div>
+ <div class="muted">
+  Recorde: <b id="best">0</b>
+ </div>
 </div>
 
 <div class="panel">
 
-<div class="muted">Combine 3 símbolos iguais</div>
+ <div class="muted">
+  Selecione 3 imagens iguais!
+ </div>
 
-<div class="game" id="board">
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-<div class="cell">❔</div>
-</div>
+ <div class="game" id="board"></div>
 
-<div class="message" id="message">
-Toque em JOGAR para começar.
-</div>
+ <div class="message" id="message">
+  Toque em três imagens iguais para ganhar pontos!
+ </div>
 
-<button class="play" id="play">🎮 JOGAR</button>
-<button class="secondary" id="reset">↻ Zerar pontuação</button>
+ <button class="play" id="play">
+  🎮 COMEÇAR JOGO
+ </button>
+
+ <button class="secondary" id="reset">
+  ↻ Zerar pontuação
+ </button>
 
 </div>
 
 <div class="panel rules">
-<b>Como jogar:</b><br>
-Cada rodada revela 9 símbolos.<br>
-3 iguais = 10 pontos.<br>
-4 iguais = 20 pontos.<br>
-5 ou mais iguais = 30 pontos.
-<br><br>
-<b>Importante:</b> os pontos são apenas do jogo e não representam dinheiro real nem saque.
+ <b>COMO JOGAR</b><br>
+ 1. Escolha três imagens iguais.<br>
+ 2. Cada combinação vale 10 pontos.<br>
+ 3. As imagens acertadas serão substituídas.<br>
+ 4. Continue combinando para aumentar sua pontuação!
+
+ <br><br>
+ <b>Importante:</b> os pontos são apenas do jogo.
+ Não representam dinheiro real nem permitem saque.
 </div>
 
 </div>
 
 <script>
-const symbols=["🍀","💎","⭐","🪙","🎁","💰"];
+const symbols = ["🍀","💎","⭐","🪙","🎁","💰","🎯","🚀"];
 
-let score=0;
-let best=Number(localStorage.getItem("rf_best")||0);
-let busy=false;
+let score = 0;
+let best = Number(localStorage.getItem("rf_best") || 0);
+let selected = [];
+let boardSymbols = [];
+let busy = false;
+let started = false;
 
-const scoreEl=document.getElementById("score");
-const bestEl=document.getElementById("best");
-const board=document.getElementById("board");
-const msg=document.getElementById("message");
-const play=document.getElementById("play");
+const board = document.getElementById("board");
+const scoreEl = document.getElementById("score");
+const bestEl = document.getElementById("best");
+const message = document.getElementById("message");
+const play = document.getElementById("play");
 
-bestEl.textContent=best;
+bestEl.textContent = best;
 
-function draw(arr,winning=[]){
- board.innerHTML="";
- arr.forEach((s,i)=>{
-  const d=document.createElement("div");
-  d.className="cell"+(winning.includes(i)?" win":"");
-  d.textContent=s;
-  board.appendChild(d);
- });
+function randomSymbol(){
+ return symbols[Math.floor(Math.random()*symbols.length)];
 }
 
-function start(){
- if(busy)return;
+function createBoard(){
+ boardSymbols = Array.from(
+  {length:16},
+  () => randomSymbol()
+ );
+ renderBoard();
+}
 
- busy=true;
- play.disabled=true;
- msg.textContent="Girando os símbolos...";
+function renderBoard(){
+ board.innerHTML = "";
 
- let count=0;
- let final=[];
+ boardSymbols.forEach((symbol,index)=>{
+  const cell = document.createElement("button");
 
- const timer=setInterval(()=>{
-  final=Array.from({length:9},()=>{
-   return symbols[Math.floor(Math.random()*symbols.length)];
+  cell.className = "cell";
+  cell.textContent = symbol;
+  cell.type = "button";
+
+  if(selected.includes(index)){
+   cell.classList.add("selected");
+  }
+
+  cell.disabled = busy || !started;
+
+  cell.addEventListener("click",()=>{
+   selectCell(index);
   });
 
-  draw(final);
-  count++;
-
-  if(count>=12){
-   clearInterval(timer);
-   finish(final);
-  }
- },100);
+  board.appendChild(cell);
+ });
 }
 
-function finish(arr){
- const counts={};
-
- arr.forEach(s=>{
-  counts[s]=(counts[s]||0)+1;
- });
-
- const max=Math.max(...Object.values(counts));
-
- let points=max>=5?30:max===4?20:max===3?10:0;
-
- const winner=arr.map((s,i)=>{
-  return counts[s]===max&&max>=3?i:-1;
- }).filter(i=>i>=0);
-
- score+=points;
- scoreEl.textContent=score;
-
- if(score>best){
-  best=score;
-  localStorage.setItem("rf_best",best);
-  bestEl.textContent=best;
+function selectCell(index){
+ if(busy || !started || selected.includes(index)){
+  return;
  }
 
- draw(arr,winner);
+ selected.push(index);
+ renderBoard();
 
- msg.textContent=points?
- `🎉 ${max} iguais! Você ganhou ${points} pontos!`:
- "Quase! Nenhum trio. Tente novamente!";
-
- busy=false;
- play.disabled=false;
- play.textContent="🎮 JOGAR NOVAMENTE";
+ if(selected.length === 3){
+  checkMatch();
+ }
 }
 
-play.addEventListener("click",start);
+function checkMatch(){
+ busy = true;
+
+ const chosen = selected.map(
+  index => boardSymbols[index]
+ );
+
+ if(chosen[0] === chosen[1] &&
+    chosen[1] === chosen[2]){
+
+  message.textContent = "🎉 PARABÉNS! Você acertou! +10 pontos!";
+  
+  score += 10;
+  scoreEl.textContent = score;
+
+  if(score > best){
+   best = score;
+   localStorage.setItem("rf_best",best);
+   bestEl.textContent = best;
+  }
+
+  renderBoard();
+
+  setTimeout(()=>{
+   selected.forEach(index=>{
+    boardSymbols[index] = randomSymbol();
+   });
+
+   selected = [];
+   busy = false;
+
+   message.textContent =
+    "Muito bem! Continue procurando combinações!";
+
+   renderBoard();
+  },800);
+
+ }else{
+
+  message.textContent =
+   "❌ Não são iguais! Tente outra combinação.";
+
+  setTimeout(()=>{
+   selected = [];
+   busy = false;
+   renderBoard();
+   message.textContent =
+    "Procure três imagens iguais!";
+  },900);
+ }
+}
+
+function startGame(){
+ if(busy) return;
+
+ score = 0;
+ scoreEl.textContent = 0;
+
+ selected = [];
+ started = true;
+ busy = false;
+
+ createBoard();
+
+ message.textContent =
+  "Jogo iniciado! Encontre três imagens iguais.";
+
+ play.textContent = "🔄 RECOMEÇAR";
+}
+
+play.addEventListener("click",startGame);
 
 document.getElementById("reset").addEventListener("click",()=>{
- if(busy)return;
+ if(busy) return;
 
- score=0;
- scoreEl.textContent=0;
- msg.textContent="Pontuação zerada. Vamos jogar!";
+ score = 0;
+ scoreEl.textContent = 0;
+
+ message.textContent =
+  "Pontuação zerada! Continue jogando.";
+
 });
+
+createBoard();
+renderBoard();
 </script>
 
 </body>
 </html>
+
