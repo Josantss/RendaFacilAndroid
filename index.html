@@ -5,353 +5,175 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Renda Fácil</title>
-
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#081b33,#145477);
+color:white;
+text-align:center;
+padding:20px;
 }
-
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #081b33, #123d5a);
-  color: white;
-  min-height: 100vh;
-  text-align: center;
+.container{max-width:500px;margin:auto}
+h1{color:#ffd700}
+.info{
+display:flex;
+justify-content:space-around;
+background:#ffffff18;
+padding:15px;
+border-radius:12px;
+margin:20px 0;
 }
-
-.container {
-  max-width: 430px;
-  margin: auto;
+.tabuleiro{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
 }
-
-h1 {
-  color: #ffd700;
-  font-size: 32px;
-  margin-bottom: 5px;
+.carta{
+height:105px;
+border:2px solid #ffffff55;
+border-radius:14px;
+background:#17618b;
+font-size:38px;
+cursor:pointer;
+color:white;
 }
-
-.subtitle {
-  color: #d5e6f5;
-  margin-bottom: 20px;
+.carta:disabled{cursor:default}
+.carta.aberta{background:white}
+button.jogar{
+margin-top:22px;
+padding:15px 30px;
+border:0;
+border-radius:12px;
+background:#ffd700;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
 }
-
-.stats {
-  display: flex;
-  justify-content: space-around;
-  gap: 8px;
-  margin: 20px 0;
-}
-
-.stat {
-  background: #16476b;
-  padding: 12px 8px;
-  border-radius: 12px;
-  flex: 1;
-}
-
-.stat strong {
-  display: block;
-  color: #ffd700;
-  font-size: 23px;
-  margin-top: 5px;
-}
-
-#message {
-  min-height: 48px;
-  font-size: 17px;
-  font-weight: bold;
-  margin: 15px 0;
-}
-
-.game {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.card {
-  aspect-ratio: 1;
-  background: linear-gradient(145deg, #2476a5, #104064);
-  border: 2px solid #55b9ed;
-  border-radius: 12px;
-  font-size: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 8px #0005;
-  user-select: none;
-  transition: 0.2s;
-}
-
-.card.hidden {
-  color: white;
-}
-
-.card.hidden::after {
-  content: "?";
-  font-weight: bold;
-  font-size: 32px;
-}
-
-.card.revealed {
-  background: white;
-  border-color: #ffd700;
-}
-
-.card.correct {
-  background: #198754;
-  border-color: #62ff9c;
-}
-
-.card:disabled {
-  cursor: default;
-  opacity: 0.85;
-}
-
-button.main-button {
-  width: 100%;
-  padding: 16px;
-  margin-top: 22px;
-  border: none;
-  border-radius: 12px;
-  background: #ffd700;
-  color: #102b42;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button.main-button:active {
-  transform: scale(0.98);
-}
-
-.instructions {
-  background: #16476b;
-  padding: 15px;
-  border-radius: 12px;
-  margin-top: 20px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.footer {
-  margin-top: 20px;
-  color: #a9c8dc;
-  font-size: 12px;
-}
+#mensagem{margin-top:20px;font-size:18px}
 </style>
 </head>
-
 <body>
-
 <div class="container">
+<h1>💰 RENDA FÁCIL</h1>
+<p>Encontre três imagens iguais!</p>
 
-  <h1>💰 Renda Fácil</h1>
-  <p class="subtitle">Encontre as três imagens iguais!</p>
+<div class="info">
+<div>⭐ Pontos<br><b id="pontos">0</b></div>
+<div>🎯 Tentativas<br><b id="tentativas">5</b></div>
+</div>
 
-  <div class="stats">
-    <div class="stat">
-      Pontuação
-      <strong id="score">0</strong>
-    </div>
+<div class="tabuleiro" id="tabuleiro"></div>
 
-    <div class="stat">
-      Tentativas
-      <strong id="attempts">5</strong>
-    </div>
+<div id="mensagem">Clique em jogar para começar!</div>
 
-    <div class="stat">
-      Recorde
-      <strong id="record">0</strong>
-    </div>
-  </div>
-
-  <div id="message">
-    Clique em jogar para começar!
-  </div>
-
-  <div class="game" id="game"></div>
-
-  <button class="main-button" id="startButton" onclick="startGame()">
-    🎮 JOGAR
-  </button>
-
-  <div class="instructions">
-    <strong>📌 Como jogar:</strong><br>
-    1. Clique nas cartas para revelar as imagens.<br>
-    2. Encontre três imagens iguais.<br>
-    3. Você tem somente 5 tentativas.<br>
-    4. Acertou? Ganha 10 pontos!<br>
-    5. Errou? Perde 2 pontos.
-  </div>
-
-  <div class="footer">
-    Renda Fácil © 2026
-  </div>
-
+<button class="jogar" onclick="iniciar()">🎮 JOGAR</button>
 </div>
 
 <script>
-let score = Number(localStorage.getItem("rf_score")) || 0;
-let record = Number(localStorage.getItem("rf_record")) || 0;
+let imagens=[];
+let selecionadas=[];
+let pontos=0;
+let tentativas=5;
+let bloqueado=true;
+let paresEncontrados=0;
 
-let attempts = 5;
-let selected = [];
-let cards = [];
-let playing = false;
-let checking = false;
-
-const images = ["🐶", "🐱", "🦁", "🐼"];
-
-const game = document.getElementById("game");
-const message = document.getElementById("message");
-const startButton = document.getElementById("startButton");
-
-function updateStats() {
-  document.getElementById("score").textContent = score;
-  document.getElementById("attempts").textContent = attempts;
-  document.getElementById("record").textContent = record;
-
-  localStorage.setItem("rf_score", score);
-  localStorage.setItem("rf_record", record);
+function embaralhar(lista){
+return lista.sort(()=>Math.random()-0.5);
 }
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+function iniciar(){
+pontos=0;
+tentativas=5;
+paresEncontrados=0;
+selecionadas=[];
+bloqueado=false;
+
+document.getElementById("pontos").textContent=pontos;
+document.getElementById("tentativas").textContent=tentativas;
+document.getElementById("mensagem").textContent=
+"Encontre três imagens iguais!";
+
+imagens=embaralhar([
+"🐱","🐱","🐱",
+"🍎","🍎","🍎",
+"🚗","🚗","🚗"
+]);
+
+let tabuleiro=document.getElementById("tabuleiro");
+tabuleiro.innerHTML="";
+
+imagens.forEach((imagem,i)=>{
+let carta=document.createElement("button");
+carta.className="carta";
+carta.textContent="❓";
+carta.dataset.imagem=imagem;
+carta.onclick=()=>clicar(carta);
+tabuleiro.appendChild(carta);
+});
 }
 
-function startGame() {
-  attempts = 5;
-  selected = [];
-  cards = [];
-  playing = true;
-  checking = false;
+function clicar(carta){
+if(bloqueado ||
+carta.classList.contains("aberta") ||
+carta.disabled) return;
 
-  game.innerHTML = "";
+carta.classList.add("aberta");
+carta.textContent=carta.dataset.imagem;
+selecionadas.push(carta);
 
-  // 4 imagens diferentes, com 4 cópias de cada.
-  let deck = [];
+if(selecionadas.length===3){
+bloqueado=true;
+tentativas--;
+document.getElementById("tentativas").textContent=tentativas;
 
-  images.forEach(image => {
-    for (let i = 0; i < 4; i++) {
-      deck.push(image);
-    }
-  });
+let iguais=selecionadas.every(c=>
+c.dataset.imagem===selecionadas[0].dataset.imagem
+);
 
-  shuffle(deck);
+if(iguais){
+pontos+=10;
+paresEncontrados++;
+document.getElementById("pontos").textContent=pontos;
 
-  deck.forEach((image, index) => {
-    const card = document.createElement("button");
+selecionadas.forEach(c=>c.disabled=true);
+document.getElementById("mensagem").textContent=
+"🎉 Parabéns! Você encontrou três imagens iguais!";
 
-    card.type = "button";
-    card.className = "card hidden";
-    card.textContent = "";
-    card.dataset.image = image;
-    card.setAttribute("aria-label", "Carta escondida");
+selecionadas=[];
+bloqueado=false;
 
-    card.onclick = () => revealCard(card);
-
-    game.appendChild(card);
-    cards.push(card);
-  });
-
-  message.textContent = "Encontre três imagens iguais!";
-  startButton.textContent = "🔄 RECOMEÇAR";
-
-  updateStats();
+if(paresEncontrados===3){
+bloqueado=true;
+document.getElementById("mensagem").textContent=
+"🏆 Você venceu! Pontuação: "+pontos;
 }
+}else{
+document.getElementById("mensagem").textContent=
+"Não são iguais! Tente novamente.";
 
-function revealCard(card) {
-  if (!playing || checking) return;
-  if (!card.classList.contains("hidden")) return;
-
-  card.classList.remove("hidden");
-  card.classList.add("revealed");
-  card.textContent = card.dataset.image;
-  card.setAttribute("aria-label", "Imagem revelada");
-
-  selected.push(card);
-
-  if (selected.length === 3) {
-    checking = true;
-    checkCards();
-  }
+setTimeout(()=>{
+selecionadas.forEach(c=>{
+c.classList.remove("aberta");
+c.textContent="❓";
+});
+selecionadas=[];
+if(tentativas===0){
+bloqueado=true;
+document.getElementById("mensagem").textContent=
+"Fim de jogo! Sua pontuação: "+pontos;
+}else{
+bloqueado=false;
 }
-
-function checkCards() {
-  const first = selected[0].dataset.image;
-
-  const isCorrect = selected.every(
-    card => card.dataset.image === first
-  );
-
-  if (isCorrect) {
-    score += 10;
-
-    selected.forEach(card => {
-      card.classList.remove("revealed");
-      card.classList.add("correct");
-      card.disabled = true;
-    });
-
-    message.textContent = "🎉 PARABÉNS! Você encontrou as três iguais!";
-
-    if (score > record) {
-      record = score;
-    }
-
-    playing = false;
-    checking = false;
-
-    updateStats();
-    startButton.textContent = "🎮 JOGAR NOVAMENTE";
-
-  } else {
-    attempts--;
-    score = Math.max(0, score - 2);
-
-    message.textContent = "❌ Não são iguais! Tente novamente.";
-
-    updateStats();
-
-    setTimeout(() => {
-      selected.forEach(card => {
-        card.classList.remove("revealed");
-        card.classList.add("hidden");
-        card.textContent = "";
-        card.setAttribute("aria-label", "Carta escondida");
-      });
-
-      selected = [];
-      checking = false;
-
-      if (attempts <= 0) {
-        playing = false;
-        message.textContent =
-          "😢 Suas tentativas acabaram! Tente novamente.";
-
-        startButton.textContent = "🔄 JOGAR NOVAMENTE";
-      } else {
-        message.textContent =
-          "Você ainda tem " + attempts + " tentativa(s)!";
-      }
-
-    }, 1000);
-  }
+},1000);
 }
-
-updateStats();
+}
+}
 </script>
-
 </body>
 </html>
+
 
 
 
