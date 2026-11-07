@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Renda Fácil</title>
-<link rel="manifest" href="manifest.json">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9893581797620249" crossorigin="anonymous"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
   body{background:#0a8a3f;color:#fff;text-align:center;padding:20px;padding-bottom:40px}
@@ -17,7 +17,7 @@
   .btn-sacar{background:#ffcc00;color:#000}
   input{width:100%;padding:13px;border-radius:10px;border:1px solid #ccc;margin-top:10px;font-size:16px}
   .aviso{font-size:13px;color:#666;margin-top:10px}
-  .anuncio{background:#f0f0f0;padding:15px;text-align:center;margin:15px auto;border-radius:12px;max-width:400px;color:#333}
+  .anuncio{background:#fff;padding:15px;text-align:center;margin:15px auto;border-radius:12px;max-width:400px;color:#333}
 </style>
 </head>
 <body>
@@ -30,33 +30,39 @@
   <div class="saldo" id="saldo">R$ 0,00</div>
   <div class="nivel" id="nivel">Nível 1 - Iniciante</div>
   <p id="progresso">Faltam R$ 20 para sacar</p>
-
   <button class="btn-ganhar" onclick="ganhar()">🤑 GANHAR R$ 1</button>
   <button class="btn-convidar" onclick="convidar()">📲 CONVIDAR AMIGO + R$ 20</button>
-  
   <input id="pix" placeholder="Sua chave Pix (ex: seu e-mail)">
   <button class="btn-sacar" onclick="sacar()">💸 SACAR</button>
   <p class="aviso" id="msg"></p>
 </div>
 
-<!-- ANÚNCIO - GANHO DE VERDADE VAI AQUI -->
+<!-- ANÚNCIO DE VERDADE -->
 <div class="anuncio">
   <p style="font-size:11px;color:#888;">ANÚNCIO</p>
-  <!-- COLE O CÓDIGO DO GOOGLE ADSENSE AQUI QUANDO SUA CONTA FOR APROVADA -->
-  <p style="font-size:14px;">Seu anúncio vai aparecer aqui</p>
-  <p style="font-size:12px;color:#777;">Quanto mais gente ver, mais você ganha.</p>
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9893581797620249"
+       data-ad-slot="1234567890"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 <div class="card">
   <h3>🏆 Como funciona</h3>
   <p style="text-align:left;margin-top:10px;line-height:1.6;font-size:15px">
-  • Clique em GANHAR para ganhar pontos<br>
-  • Convide amigos para ganhar bônus<br>
-  • Suba de nível e desbloqueie prêmios<br>
-  • O saque é apenas simulação do jogo
+    - Clique em GANHAR para ganhar pontos<br>
+    - Convide amigos para ganhar bônus<br>
+    - Suba de nível e desbloqueie prêmios<br>
+    - O saque é apenas simulação do jogo
   </p>
   <p class="aviso">Este é um jogo para diversão. Os valores são pontos do jogo.</p>
 </div>
+
+<p style="font-size:13px;margin-top:20px"><a href="privacidade.html" style="color:#fff">Política de Privacidade</a></p>
 
 <script>
 let saldo = parseFloat(localStorage.getItem('saldo') || 0);
@@ -70,30 +76,14 @@ function atualizar(){
   document.getElementById('progresso').innerText = saldo >= 20 ? 'Você já pode sacar!' : 'Faltam R$ ' + (20 - saldo).toFixed(2).replace('.',',') + ' para sacar';
   localStorage.setItem('saldo', saldo);
 }
-function ganhar(){
-  saldo += 1;
-  atualizar();
-  document.getElementById('msg').innerText = 'Você ganhou R$ 1! 🎉';
-}
-function convidar(){
-  saldo += 20;
-  atualizar();
-  navigator.clipboard.writeText(window.location.href);
-  document.getElementById('msg').innerText = 'Link copiado! Manda pros amigos! 📲';
-}
+function ganhar(){ saldo += 1; atualizar(); document.getElementById('msg').innerText = 'Você ganhou R$ 1! 🎉'; }
+function convidar(){ saldo += 20; atualizar(); navigator.clipboard.writeText(window.location.href); document.getElementById('msg').innerText = 'Link copiado! Manda pros amigos! 📲'; }
 function sacar(){
-  if(saldo < 20){
-    document.getElementById('msg').innerText = 'Você precisa de no mínimo R$ 20 para sacar. Faltam R$ ' + (20 - saldo).toFixed(2) + '';
-    return;
-  }
+  if(saldo < 20){ document.getElementById('msg').innerText = 'Você precisa de no mínimo R$ 20 para sacar.'; return; }
   let pix = document.getElementById('pix').value;
-  if(!pix){
-    document.getElementById('msg').innerText = 'Digite sua chave Pix primeiro!';
-    return;
-  }
+  if(!pix){ document.getElementById('msg').innerText = 'Digite sua chave Pix primeiro!'; return; }
   document.getElementById('msg').innerText = 'Saque de R$ ' + saldo.toFixed(2) + ' solicitado! (Simulação do jogo)';
-  saldo = 0;
-  atualizar();
+  saldo = 0; atualizar();
 }
 atualizar();
 </script>
