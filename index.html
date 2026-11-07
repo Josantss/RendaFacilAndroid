@@ -21,6 +21,9 @@ h1{text-align:center;color:#0a8a3f}
 .card span{color:#666;font-size:13px}
 button{background:#0a8a3f;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer}
 button:active{transform:scale(0.97)}
+.saque{background:#fff;padding:15px;border-radius:12px;margin-top:15px;text-align:center}
+.saque input{width:90%;padding:12px;border:1px solid #ccc;border-radius:10px;margin:10px 0;font-size:15px;text-align:center}
+.saque button{width:100%;background:#6a1b9a}
 </style>
 </head>
 <body>
@@ -58,6 +61,13 @@ button:active{transform:scale(0.97)}
 
 <button onclick="proximoNivel()" style="width:100%;background:#ff9800;margin-top:10px">➡️ Próximo Nível</button>
 
+<div class="saque">
+<b>💸 Sacar via Pix</b><br>
+<span style="color:#666;font-size:13px">Saque mínimo R$ 20</span><br>
+<input id="chavePix" type="text" placeholder="Digite sua chave Pix (CPF, celular ou e-mail)">
+<button onclick="sacar()">Sacar Agora</button>
+</div>
+
 </div>
 
 <script>
@@ -83,6 +93,22 @@ function proximoNivel(){
   nivel = nivel + 1;
   document.getElementById("nivel").textContent = nivel;
   document.getElementById("mensagem").textContent = "Parabéns! Você subiu para o Nível " + nivel;
+  salvar();
+}
+
+function sacar(){
+  let chave = document.getElementById("chavePix").value;
+  if(chave == ""){
+    document.getElementById("mensagem").textContent = "⚠️ Digite sua chave Pix primeiro!";
+    return;
+  }
+  if(pontuacao < 20){
+    document.getElementById("mensagem").textContent = "⚠️ Você precisa de no mínimo R$ 20 para sacar. Faltam R$ " + (20 - pontuacao);
+    return;
+  }
+  document.getElementById("mensagem").textContent = "✅ Saque de R$ " + pontuacao + " solicitado para " + chave + "! Pagamento em até 24h.";
+  pontuacao = 0;
+  document.getElementById("pontuacao").textContent = pontuacao;
   salvar();
 }
 </script>
