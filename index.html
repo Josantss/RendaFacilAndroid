@@ -4,62 +4,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Renda Fácil</title>
-
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a8a3f">
-<link rel="icon" href="icon-192.png">
-
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:20px;font-family:Arial,sans-serif;background:linear-gradient(135deg,#081b33,#123d5a);color:#fff;text-align:center;min-height:100vh}
-.container{max-width:500px;margin:auto}
-h1{color:#ffd700;font-size:32px}
-.saldo{background:#fff;color:#081b33;border-radius:16px;padding:20px;margin:20px 0}
-.saldo h2{margin:0;font-size:16px}
-.saldo p{font-size:36px;font-weight:bold;margin:5px 0;color:#0a8a3f}
-.nivel{background:#ffd700;color:#081b33;padding:8px;border-radius:20px;font-weight:bold;display:inline-block}
-.card{background:#fff;color:#333;border-radius:16px;padding:16px;margin:12px 0;text-align:left;display:flex;justify-content:space-between;align-items:center}
-.card b{font-size:17px}
-.card span{color:#0a8a3f;font-weight:bold}
-button{background:#0a8a3f;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer}
+body{font-family:Arial,sans-serif;background:#f2f2f2;margin:0;padding:0}
+.container{max-width:480px;margin:0 auto;padding:20px}
+h1{text-align:center;color:#0a8a3f}
+.nivel{text-align:center;font-weight:bold;margin-bottom:10px}
+.saldo{background:#0a8a3f;color:#fff;padding:20px;border-radius:15px;text-align:center}
+.saldo h2{margin:0;font-size:18px}
+.saldo p{font-size:32px;margin:5px 0;font-weight:bold}
+.saldo small{opacity:0.9}
+#mensagem{background:#fff;padding:12px;border-radius:10px;text-align:center;margin:15px 0;font-weight:bold}
+.card{background:#fff;padding:15px;border-radius:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.card b{font-size:16px}
+.card span{color:#666;font-size:13px}
+button{background:#0a8a3f;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer}
 button:active{transform:scale(0.97)}
-#mensagem{margin-top:15px;font-size:18px;min-height:24px}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>💰 Renda Fácil</h1>
-  <div class="nivel">Nível <span id="nivel">1</span></div>
+<h1>💰 Renda Fácil</h1>
+<div class="nivel">Nível <span id="nivel">1</span></div>
 
-  <div class="saldo">
-    <h2>Seu saldo</h2>
-    <p>R$ <span id="pontuacao">0</span></p>
-    <small>Ganhe jogando e completando tarefas</small>
-  </div>
+<div class="saldo">
+<h2>Seu saldo</h2>
+<p>R$ <span id="pontuacao">0</span></p>
+<small>Ganhe jogando e completando tarefas</small>
+</div>
 
-  <div id="mensagem">Clique em uma tarefa para ganhar!</div>
+<div id="mensagem">Clique em uma tarefa para ganhar</div>
 
-  <div class="card">
-    <div><b>🎮 Jogar e Ganhar</b><br><span>+ R$ 5</span></div>
-    <button onclick="ganhar(5,'Você ganhou R$ 5 jogando! 🎮')">Jogar</button>
-  </div>
+<div class="card">
+<div><b>🎮 Jogar e Ganhar</b><br><span>+ R$ 5</span></div>
+<button onclick="ganhar(5,'Você ganhou R$ 5 jogando!')">Jogar</button>
+</div>
 
-  <div class="card">
-    <div><b>📺 Assistir Vídeo</b><br><span>+ R$ 3</span></div>
-    <button onclick="ganhar(3,'Você ganhou R$ 3 assistindo! 📺')">Assistir</button>
-  </div>
+<div class="card">
+<div><b>📺 Assistir Vídeo</b><br><span>+ R$ 3</span></div>
+<button onclick="ganhar(3,'Você ganhou R$ 3 assistindo!')">Assistir</button>
+</div>
 
-  <div class="card">
-    <div><b>📝 Responder Pesquisa</b><br><span>+ R$ 10</span></div>
-    <button onclick="ganhar(10,'Você ganhou R$ 10 na pesquisa! 📝')">Responder</button>
-  </div>
+<div class="card">
+<div><b>📝 Responder Pesquisa</b><br><span>+ R$ 10</span></div>
+<button onclick="ganhar(10,'Você ganhou R$ 10 na pesquisa!')">Responder</button>
+</div>
 
-  <div class="card">
-    <div><b>👥 Convidar Amigo</b><br><span>+ R$ 20</span></div>
-    <button onclick="ganhar(20,'Você ganhou R$ 20 convidando! 👥')">Convidar</button>
-  </div>
+<div class="card">
+<div><b>👥 Convidar Amigo</b><br><span>+ R$ 20</span></div>
+<button onclick="ganhar(20,'Você ganhou R$ 20 convidando!')">Convidar</button>
+</div>
 
-  <button onclick="proximoNivel()" style="background:#ffd700;color:#081b33;width:100%;
+<button onclick="proximoNivel()" style="width:100%;background:#ff9800;margin-top:10px">➡️ Próximo Nível</button>
+
+</div>
+
+<script>
+let pontuacao = 0;
+let nivel = 1;
+
+function ganhar(valor, msg){
+  pontuacao = pontuacao + valor;
+  document.getElementById("pontuacao").textContent = pontuacao;
+  document.getElementById("mensagem").textContent = msg;
+}
+
+function proximoNivel(){
+  nivel = nivel + 1;
+  document.getElementById("nivel").textContent = nivel;
+  document.getElementById("mensagem").textContent = "Parabéns! Você subiu para o Nível " + nivel;
+}
+</script>
+</body>
+</html>
 
 
 
