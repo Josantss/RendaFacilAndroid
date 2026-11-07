@@ -61,26 +61,30 @@ button:active{transform:scale(0.97)}
 </div>
 
 <script>
-let pontuacao = 0;
-let nivel = 1;
+let pontuacao = parseInt(localStorage.getItem("saldo")) || 0;
+let nivel = parseInt(localStorage.getItem("nivel")) || 1;
+
+document.getElementById("pontuacao").textContent = pontuacao;
+document.getElementById("nivel").textContent = nivel;
+
+function salvar(){
+  localStorage.setItem("saldo", pontuacao);
+  localStorage.setItem("nivel", nivel);
+}
 
 function ganhar(valor, msg){
   pontuacao = pontuacao + valor;
   document.getElementById("pontuacao").textContent = pontuacao;
   document.getElementById("mensagem").textContent = msg;
+  salvar();
 }
 
 function proximoNivel(){
   nivel = nivel + 1;
   document.getElementById("nivel").textContent = nivel;
   document.getElementById("mensagem").textContent = "Parabéns! Você subiu para o Nível " + nivel;
+  salvar();
 }
 </script>
 </body>
 </html>
-
-
-
-
-
-
