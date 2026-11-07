@@ -5,112 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Renda Fácil</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a8a3f">
 <style>
-body{font-family:Arial,sans-serif;background:#f2f2f2;margin:0;padding:0}
-.container{max-width:480px;margin:0 auto;padding:20px}
-h1{text-align:center;color:#0a8a3f}
-.nivel{text-align:center;font-weight:bold;margin-bottom:10px}
-.saldo{background:#0a8a3f;color:#fff;padding:20px;border-radius:15px;text-align:center}
-.saldo h2{margin:0;font-size:18px}
-.saldo p{font-size:32px;margin:5px 0;font-weight:bold}
-.saldo small{opacity:0.9}
-#mensagem{background:#fff;padding:12px;border-radius:10px;text-align:center;margin:15px 0;font-weight:bold}
-.card{background:#fff;padding:15px;border-radius:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-.card b{font-size:16px}
-.card span{color:#666;font-size:13px}
-button{background:#0a8a3f;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer}
-button:active{transform:scale(0.97)}
-.saque{background:#fff;padding:15px;border-radius:12px;margin-top:15px;text-align:center}
-.saque input{width:90%;padding:12px;border:1px solid #ccc;border-radius:10px;margin:10px 0;font-size:15px;text-align:center}
-.saque button{width:100%;background:#6a1b9a}
+  *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+  body{background:#0a8a3f;color:#fff;text-align:center;padding:20px;padding-bottom:40px}
+  .card{background:#fff;color:#222;border-radius:20px;padding:20px;margin:15px auto;max-width:400px;box-shadow:0 10px 25px rgba(0,0,0,.2)}
+  .saldo{font-size:42px;font-weight:bold;color:#0a8a3f}
+  .nivel{background:#ffe600;color:#000;padding:6px 14px;border-radius:20px;font-weight:bold;display:inline-block;margin:8px 0}
+  button{width:100%;padding:15px;border:none;border-radius:12px;font-size:17px;font-weight:bold;margin-top:10px;cursor:pointer}
+  .btn-ganhar{background:#0a8a3f;color:#fff;font-size:20px}
+  .btn-convidar{background:#25D366;color:#fff}
+  .btn-sacar{background:#ffcc00;color:#000}
+  input{width:100%;padding:13px;border-radius:10px;border:1px solid #ccc;margin-top:10px;font-size:16px}
+  .aviso{font-size:13px;color:#666;margin-top:10px}
+  .anuncio{background:#f0f0f0;padding:15px;text-align:center;margin:15px auto;border-radius:12px;max-width:400px;color:#333}
 </style>
 </head>
 <body>
-<div class="container">
+
 <h1>💰 Renda Fácil</h1>
-<div class="nivel">Nível <span id="nivel">1</span></div>
-
-<div class="saldo">
-<h2>Seu saldo</h2>
-<p>R$ <span id="pontuacao">0</span></p>
-<small>Ganhe jogando e completando tarefas</small>
-</div>
-
-<div id="mensagem">Clique em uma tarefa para ganhar</div>
+<p>Jogue, suba de nível e divirta-se!</p>
 
 <div class="card">
-<div><b>🎮 Jogar e Ganhar</b><br><span>+ R$ 5</span></div>
-<button onclick="ganhar(5,'Você ganhou R$ 5 jogando!')">Jogar</button>
+  <p>Seu Saldo</p>
+  <div class="saldo" id="saldo">R$ 0,00</div>
+  <div class="nivel" id="nivel">Nível 1 - Iniciante</div>
+  <p id="progresso">Faltam R$ 20 para sacar</p>
+
+  <button class="btn-ganhar" onclick="ganhar()">🤑 GANHAR R$ 1</button>
+  <button class="btn-convidar" onclick="convidar()">📲 CONVIDAR AMIGO + R$ 20</button>
+  
+  <input id="pix" placeholder="Sua chave Pix (ex: seu e-mail)">
+  <button class="btn-sacar" onclick="sacar()">💸 SACAR</button>
+  <p class="aviso" id="msg"></p>
+</div>
+
+<!-- ANÚNCIO - GANHO DE VERDADE VAI AQUI -->
+<div class="anuncio">
+  <p style="font-size:11px;color:#888;">ANÚNCIO</p>
+  <!-- COLE O CÓDIGO DO GOOGLE ADSENSE AQUI QUANDO SUA CONTA FOR APROVADA -->
+  <p style="font-size:14px;">Seu anúncio vai aparecer aqui</p>
+  <p style="font-size:12px;color:#777;">Quanto mais gente ver, mais você ganha.</p>
 </div>
 
 <div class="card">
-<div><b>📺 Assistir Vídeo</b><br><span>+ R$ 3</span></div>
-<button onclick="ganhar(3,'Você ganhou R$ 3 assistindo!')">Assistir</button>
-</div>
-
-<div class="card">
-<div><b>📝 Responder Pesquisa</b><br><span>+ R$ 10</span></div>
-<button onclick="ganhar(10,'Você ganhou R$ 10 na pesquisa!')">Responder</button>
-</div>
-
-<div class="card">
-<div><b>👥 Convidar Amigo</b><br><span>+ R$ 20</span></div>
-<button onclick="ganhar(20,'Você ganhou R$ 20 convidando!')">Convidar</button>
-</div>
-
-<button onclick="proximoNivel()" style="width:100%;background:#ff9800;margin-top:10px">➡️ Próximo Nível</button>
-
-<div class="saque">
-<b>💸 Sacar via Pix</b><br>
-<span style="color:#666;font-size:13px">Saque mínimo R$ 20</span><br>
-<input id="chavePix" type="text" placeholder="Digite sua chave Pix (CPF, celular ou e-mail)">
-<button onclick="sacar()">Sacar Agora</button>
-</div>
-
+  <h3>🏆 Como funciona</h3>
+  <p style="text-align:left;margin-top:10px;line-height:1.6;font-size:15px">
+  • Clique em GANHAR para ganhar pontos<br>
+  • Convide amigos para ganhar bônus<br>
+  • Suba de nível e desbloqueie prêmios<br>
+  • O saque é apenas simulação do jogo
+  </p>
+  <p class="aviso">Este é um jogo para diversão. Os valores são pontos do jogo.</p>
 </div>
 
 <script>
-let pontuacao = parseInt(localStorage.getItem("saldo")) || 0;
-let nivel = parseInt(localStorage.getItem("nivel")) || 1;
-
-document.getElementById("pontuacao").textContent = pontuacao;
-document.getElementById("nivel").textContent = nivel;
-
-function salvar(){
-  localStorage.setItem("saldo", pontuacao);
-  localStorage.setItem("nivel", nivel);
+let saldo = parseFloat(localStorage.getItem('saldo') || 0);
+function atualizar(){
+  document.getElementById('saldo').innerText = 'R$ ' + saldo.toFixed(2).replace('.',',');
+  let nivel = 'Nível 1 - Iniciante';
+  if(saldo >= 100) nivel = 'Nível 4 - Mestre 💎';
+  else if(saldo >= 50) nivel = 'Nível 3 - Pro 🔥';
+  else if(saldo >= 20) nivel = 'Nível 2 - Intermediário ⭐';
+  document.getElementById('nivel').innerText = nivel;
+  document.getElementById('progresso').innerText = saldo >= 20 ? 'Você já pode sacar!' : 'Faltam R$ ' + (20 - saldo).toFixed(2).replace('.',',') + ' para sacar';
+  localStorage.setItem('saldo', saldo);
 }
-
-function ganhar(valor, msg){
-  pontuacao = pontuacao + valor;
-  document.getElementById("pontuacao").textContent = pontuacao;
-  document.getElementById("mensagem").textContent = msg;
-  salvar();
+function ganhar(){
+  saldo += 1;
+  atualizar();
+  document.getElementById('msg').innerText = 'Você ganhou R$ 1! 🎉';
 }
-
-function proximoNivel(){
-  nivel = nivel + 1;
-  document.getElementById("nivel").textContent = nivel;
-  document.getElementById("mensagem").textContent = "Parabéns! Você subiu para o Nível " + nivel;
-  salvar();
+function convidar(){
+  saldo += 20;
+  atualizar();
+  navigator.clipboard.writeText(window.location.href);
+  document.getElementById('msg').innerText = 'Link copiado! Manda pros amigos! 📲';
 }
-
 function sacar(){
-  let chave = document.getElementById("chavePix").value;
-  if(chave == ""){
-    document.getElementById("mensagem").textContent = "⚠️ Digite sua chave Pix primeiro!";
+  if(saldo < 20){
+    document.getElementById('msg').innerText = 'Você precisa de no mínimo R$ 20 para sacar. Faltam R$ ' + (20 - saldo).toFixed(2) + '';
     return;
   }
-  if(pontuacao < 20){
-    document.getElementById("mensagem").textContent = "⚠️ Você precisa de no mínimo R$ 20 para sacar. Faltam R$ " + (20 - pontuacao);
+  let pix = document.getElementById('pix').value;
+  if(!pix){
+    document.getElementById('msg').innerText = 'Digite sua chave Pix primeiro!';
     return;
   }
-  document.getElementById("mensagem").textContent = "✅ Saque de R$ " + pontuacao + " solicitado para " + chave + "! Pagamento em até 24h.";
-  pontuacao = 0;
-  document.getElementById("pontuacao").textContent = pontuacao;
-  salvar();
+  document.getElementById('msg').innerText = 'Saque de R$ ' + saldo.toFixed(2) + ' solicitado! (Simulação do jogo)';
+  saldo = 0;
+  atualizar();
 }
+atualizar();
 </script>
 </body>
 </html>
